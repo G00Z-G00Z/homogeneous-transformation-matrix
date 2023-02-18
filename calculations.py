@@ -24,19 +24,16 @@ def get_initial_arm_coordinates(angle, length):
 
 # %%
 
-# Function that returns a 3x3 homogeneous transformation matrix given an angle in degrees and a length
 
-
-def get_homogeneous_transformation_matrix(angle, length):
+def get_homogenous_matrix_from_coordinates(angle, length):
     # Get the rotation matrix
     rot = rot2d(angle)
 
     # Get the coordinates of the end of the arm
-    end = np.array([length, 0]).T
+    arm_length = np.array([length, 0]).T
+    end = rot @ arm_length
 
-    # Get the homogeneous transformation matrix
-
-    return np.block([[rot, end.reshape(2, 1)], [np.zeros(2), 1]])
+    return np.block([[rot, end.T], [np.zeros(2), 1]])
 
 
 # %%
@@ -48,8 +45,8 @@ def get_homogeneous_transformation_matrix(angle, length):
 
 
 def calculate_global_position_homogenous(a1, a2, theta1, theta2):
-    T1G = get_homogeneous_transformation_matrix(theta1, a1)
-    T2G = get_homogeneous_transformation_matrix(theta2, a2)
+    T1G = get_homogenous_matrix_from_coordinates(theta1, a1)
+    T2G = get_homogenous_matrix_from_coordinates(theta2, a2)
 
     # Find the global position of the end effector
     global_point = T1G @ T2G
@@ -82,5 +79,8 @@ theta2 = 45  # degrees
 global_point = calculate_global_position_homogenous(a1, a2, theta1, theta2)
 
 print(global_point)
+
+# %%
+
 
 # %%
