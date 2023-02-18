@@ -8,6 +8,6 @@ def test_homogeneous_cases(cases):
         global_point = calculate_global_position_homogenous(
             case.a1, case.a2, case.theta1, case.theta2
         )
-        global_point = np.reshape(global_point, (2, 1))
-        case.expected = np.reshape(case.expected, (2, 1))
+        global_point = np.reshape(global_point, (1, 2))
+        case.expected = np.reshape(case.expected, (1, 2))
         assert np.allclose(global_point, case.expected), "Coordinates did not match"
