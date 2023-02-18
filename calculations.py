@@ -1,18 +1,19 @@
 # %%
 import numpy as np
+from numpy import ndarray
 
 # Function that returns a 2x2 rotation matrix given an angle in degrees
 
 
 # %%
-def rot2d(theta):
+def rot2d(theta: int) -> ndarray:
     theta = np.deg2rad(theta)
     return np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])
 
 
 # %%
 # Functions that returns a 2x1 vector with the coordinates of a point, when giving an angle and a lenght
-def get_initial_arm_coordinates(angle, length):
+def get_initial_arm_coordinates(angle: int, length: int) -> ndarray:
     # Get the rotation matrix
     rot = rot2d(angle)
 
@@ -25,7 +26,7 @@ def get_initial_arm_coordinates(angle, length):
 # %%
 
 
-def get_homogenous_matrix_from_coordinates(angle, length):
+def get_homogenous_matrix_from_coordinates(angle: int, length: int) -> ndarray:
     # Get the rotation matrix
     rot = rot2d(angle)
 
@@ -46,7 +47,7 @@ def get_homogenous_matrix_from_coordinates(angle, length):
 # returns: the coordinates of the end effector in the global frame
 
 
-def calculate_global_position_homogenous(a1, a2, theta1, theta2):
+def calculate_global_position_homogenous(a1: int, a2: int, theta1: int, theta2: int):
     T1G = get_homogenous_matrix_from_coordinates(theta1, a1)
     T2G = get_homogenous_matrix_from_coordinates(theta2, a2)
 
@@ -56,7 +57,9 @@ def calculate_global_position_homogenous(a1, a2, theta1, theta2):
     return global_point[0:2, 2], T1G, T2G
 
 
-def calculate_global_position_not_homogenous(a1, a2, theta1, theta2):
+def calculate_global_position_not_homogenous(
+    a1: int, a2: int, theta1: int, theta2: int
+):
     # Find T1G which is the homogeneous transformation matrix from frame 1 to frame G
     rotation1 = rot2d(theta1)
     translation1 = get_initial_arm_coordinates(theta1, a1)
@@ -83,8 +86,3 @@ global_point, T1G, T2G = calculate_global_position_homogenous(a1, a2, theta1, th
 print(f"T1G: {T1G}")
 print(f"T2G: {T2G}")
 print(f"Global point: {global_point}")
-
-# %%
-
-
-# %%
