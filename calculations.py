@@ -48,14 +48,13 @@ def calculate_global_position_homogenous(
 
 
 def calculate_global_position_not_homogenous(
-    a1: int, a2: int, theta1: int, theta2: int
+    a1: float, a2: float, theta1: int, theta2: int
 ):
     # Find T1G which is the homogeneous transformation matrix from frame 1 to frame G
     rotation1 = rot2d(theta1)
     translation1 = get_initial_arm_coordinates(theta1, a1)
 
     # Find T2G which is the homogeneous transformation matrix from frame 2 to frame G
-    rotation2 = rot2d(theta2)
     translation2 = get_initial_arm_coordinates(theta2, a2)
 
     # Find the global position of the end effector
