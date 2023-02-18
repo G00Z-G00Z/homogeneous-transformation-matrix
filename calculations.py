@@ -1,19 +1,14 @@
-# %%
 import numpy as np
 from numpy import ndarray
 
-# Function that returns a 2x2 rotation matrix given an angle in degrees
 
-
-# %%
 def rot2d(theta: int) -> ndarray:
     theta = np.deg2rad(theta)
     return np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])
 
 
-# %%
-# Functions that returns a 2x1 vector with the coordinates of a point, when giving an angle and a lenght
-def get_initial_arm_coordinates(angle: int, length: int) -> ndarray:
+def get_initial_arm_coordinates(angle: int, length: float) -> ndarray:
+    """Gets the initial arm coordinates with angle and length"""
     # Get the rotation matrix
     rot = rot2d(angle)
 
@@ -23,10 +18,10 @@ def get_initial_arm_coordinates(angle: int, length: int) -> ndarray:
     return rot @ end
 
 
-# %%
-
-
-def get_homogenous_matrix_from_coordinates(angle: int, length: int) -> ndarray:
+def get_homogenous_matrix_from_coordinates(angle: int, length: float) -> ndarray:
+    """
+    Gets the homogenous matrix from angle and length
+    """
     # Get the rotation matrix
     rot = rot2d(angle)
 
@@ -34,20 +29,15 @@ def get_homogenous_matrix_from_coordinates(angle: int, length: int) -> ndarray:
     arm_length = np.array([length, 0]).T
     arm_length = np.reshape(arm_length, (2, 1))
     end = rot @ arm_length
-    mat = np.block([[rot, end], [np.zeros((1, 2)), 1]])
-
-    return mat
+    return np.block([[rot, end], [np.zeros((1, 2)), 1]])
 
 
-# %%
-
-# Calculates final poisition of the end effector given the angles of the two arms and the length of the arms
-# a1, a2: length of the arms
-# theta1, theta2: angles of the arms
-# returns: the coordinates of the end effector in the global frame
-
-
-def calculate_global_position_homogenous(a1: int, a2: int, theta1: int, theta2: int):
+def calculate_global_position_homogenous(
+    a1: float, a2: float, theta1: int, theta2: int
+):
+    """
+    Calculates the final position given the arm lengths and the angles
+    """
     T1G = get_homogenous_matrix_from_coordinates(theta1, a1)
     T2G = get_homogenous_matrix_from_coordinates(theta2, a2)
 
