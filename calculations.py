@@ -31,9 +31,11 @@ def get_homogenous_matrix_from_coordinates(angle, length):
 
     # Get the coordinates of the end of the arm
     arm_length = np.array([length, 0]).T
+    arm_length = np.reshape(arm_length, (2, 1))
     end = rot @ arm_length
+    mat = np.block([[rot, end], [np.zeros((1, 2)), 1]])
 
-    return np.block([[rot, end.T], [np.zeros(2), 1]])
+    return mat
 
 
 # %%
@@ -51,7 +53,7 @@ def calculate_global_position_homogenous(a1, a2, theta1, theta2):
     # Find the global position of the end effector
     global_point = T1G @ T2G
 
-    return global_point[0:2, 2]
+    return global_point[0:2, 2], T1G, T2G
 
 
 def calculate_global_position_not_homogenous(a1, a2, theta1, theta2):
@@ -76,9 +78,11 @@ a2 = a1  # cm
 theta1 = 30  # degrees
 theta2 = 45  # degrees
 
-global_point = calculate_global_position_homogenous(a1, a2, theta1, theta2)
+global_point, T1G, T2G = calculate_global_position_homogenous(a1, a2, theta1, theta2)
 
-print(global_point)
+print(f"T1G: {T1G}")
+print(f"T2G: {T2G}")
+print(f"Global point: {global_point}")
 
 # %%
 
