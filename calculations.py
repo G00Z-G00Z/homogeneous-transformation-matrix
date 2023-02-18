@@ -24,22 +24,35 @@ def get_initial_arm_coordinates(angle, length):
 
 # %%
 
+# Calculates final poisition of the end effector given the angles of the two arms and the length of the arms
+# a1, a2: length of the arms
+# theta1, theta2: angles of the arms
+# returns: the coordinates of the end effector in the global frame
+
+
+def calculate_global_position_not_homogenous(a1, a2, theta1, theta2):
+    # Find T1G which is the homogeneous transformation matrix from frame 1 to frame G
+    rotation1 = rot2d(theta1)
+    translation1 = get_initial_arm_coordinates(theta1, a1)
+
+    # Find T2G which is the homogeneous transformation matrix from frame 2 to frame G
+    rotation2 = rot2d(theta2)
+    translation2 = get_initial_arm_coordinates(theta2, a2)
+
+    # Find the global position of the end effector
+    global_point = rotation1 @ translation2 + translation1
+
+    return global_point
+
+
+# %%
+
 a1 = 0.04  # cm
 a2 = a1  # cm
 theta1 = 30  # degrees
 theta2 = 45  # degrees
 
-# Find T1G which is the homogeneous transformation matrix from frame 1 to frame G
-
-rotation1 = rot2d(theta1)
-translation1 = get_initial_arm_coordinates(theta1, a1)
-
-# Find T2G which is the homogeneous transformation matrix from frame 2 to frame G
-
-rotation2 = rot2d(theta2)
-translation2 = get_initial_arm_coordinates(theta2, a2)
-
-global_point = rotation1 @ translation2 + translation1
+global_point = calculate_global_position_not_homogenous(a1, a2, theta1, theta2)
 
 print(global_point)
 
